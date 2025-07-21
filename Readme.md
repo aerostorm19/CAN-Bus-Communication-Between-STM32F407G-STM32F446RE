@@ -12,53 +12,54 @@ I designed this to push the boundary of low-level communication, hardware/softwa
 
 ---
 
-## What This Rig Does
+## What This Rig Does (Communication Workflow)
 
-### STM32F407G Discovery – The Talker  
-- Reads analog input from a **potentiometer**, converts it with **ADC**, and fires off the data every **100 ms**.  
-- Configured using **HAL drivers** via **STM32CubeMX**.  
-- CAN payloads are slim—just enough data to get the job done fast.
+### STM32F407G Discovery – The Talker (Transmitter) 
+- **Analog Acquisition**: Reads potentiometer voltage through an 8-bit ADC channel.  
+- **CAN Transmission**: Sends updated values every 100 ms using a dedicated CAN ID.  
+- **Peripheral Configuration**: Managed via STM32CubeMX and HAL drivers.
 
-### STM32F446RE Nucleo – The Listener  
-- Listens in on that CAN line using **interrupts** like a spy in a thriller.  
-- Filters packets, grabs data by **message ID**, and toggles an **LED** if the analog value breaks the limit.  
-- All business, no delays.
-
----
-
-## System Specs (aka the Juicy Tech Details)
-
-| Feature           | Details                                      |
-|------------------|----------------------------------------------|
-| Protocol          | CAN (Controller Area Network)               |
-| Baud Rate         | 500 kbps                                    |
-| Transceivers      | MCP2551 / SN65HVD230                        |
-| ADC               | 8-bit, DMA-enabled (F407G side)             |
-| Interrupts        | CAN RX (F446RE side)                        |
-| Voltage Source    | Potentiometer (0–3.3V)                      |
-| Output Trigger    | Onboard LED                                 |
-| Message Format    | Standard ID, 1-byte payload                 |
+### STM32F446RE Nucleo – The Listener (Receiver)
+- **CAN Reception**: Listens for incoming messages and handles them via interrupt callbacks.  
+- **Threshold Detection**: Activates onboard LED if received value exceeds predefined limit.  
+- **GPIO Control**: Manages digital output based on real-time received data.
 
 ---
 
-## Toolchain Arsenal
+## Technical Specifications
 
-- **STM32CubeMX** – Peripheral config & code auto-gen  
-- **STM32CubeIDE** – Compile, flash, debug like a pro  
-- **HAL Libraries** – Abstraction without sacrificing control  
-- **ST-Link Utility** – For direct firmware brain uploads  
+| Parameter           | Details                                    |
+|---------------------|--------------------------------------------|
+| Communication Bus   | CAN (Controller Area Network)              |
+| Baud Rate           | 500 kbps                                   |
+| Message Format      | Standard ID, 1-byte payload                |
+| ADC Resolution      | 8-bit (STM32F407G side)                    |
+| Transceiver ICs     | MCP2551 / SN65HVD230                       |
+| Termination         | 120 Ω resistors at both CAN bus ends       |
+| Trigger Mechanism   | LED toggling on STM32F446RE (GPIO)         |
+| Message Handling    | Interrupt-driven reception and filtering   |
 
 ---
 
-## Wiring Like a Genius
+## Software Environment
 
-1. Connect **CANH** and **CANL** via your transceivers (MCP2551 or SN65HVD230)  
-2. Slap on those **120 Ω resistors** at each end—termination matters  
-3. Flash `CAN_Sender` to **STM32F407G**  
-4. Flash `CAN_Receiver` to **STM32F446RE**  
-5. Power up both boards. Rotate the pot. Watch the LED light up when you push it past the threshold.  
-6. Sit back and appreciate the elegance of interrupt-driven embedded design  
+- **STM32CubeMX**: Peripheral initialization and `.ioc` configuration  
+- **STM32CubeIDE**: Build, debug, and firmware deployment  
+- **HAL Drivers**: Hardware abstraction layer for CAN, ADC, GPIO, and NVIC  
+- **ST-Link Utility**: Programming interface for board flashing  
+- **Bare-metal C**: Low-level system control and logic implementation
 
+---
+
+## Wiring Instructions
+
+1. Connect **CANH** and **CANL** lines through appropriate CAN transceivers (e.g., MCP2551 or SN65HVD230).  
+2. Add **120 Ω termination resistors** at both ends of the CAN bus to ensure signal integrity.  
+3. Flash the `CAN_Sender` firmware to the **STM32F407G** development board.  
+4. Flash the `CAN_Receiver` firmware to the **STM32F446RE** development board.  
+5. Power both boards. Rotate the potentiometer—once it crosses the threshold, the LED on the receiver board will illuminate.  
+6. Observe the real-time behavior enabled by interrupt-driven embedded design.
+  
 ---
 
 ## File System Breakdown
@@ -92,7 +93,7 @@ Because embedded systems should talk to each other like a Jarvis talks to Iron M
 
 ---
 
-## Shoutouts (No AI assistants were harmed)
+## References
 
 - [STMicroelectronics – STM32 MCUs](https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html)  
 - [MCP2551 Datasheet – Microchip](https://www.microchip.com/en-us/product/MCP2551)  
@@ -100,7 +101,7 @@ Because embedded systems should talk to each other like a Jarvis talks to Iron M
 
 ---
 
-## Licensing
+## Licensing and Attribution
 
 All design, code, and testing were done by **Abhijit Rai**.  
 This project is a solo mission in embedded exploration.  
