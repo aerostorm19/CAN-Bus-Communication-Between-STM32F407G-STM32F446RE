@@ -110,4 +110,8 @@ Fork it, learn from it, improve it—but give credit where it’s due.
 And no, I don’t do magic. I do engineering.
 
 ---
+## Contact
 
+**Abhijit Rai**  
+Email: [abhijit.airosys@gmail.com](mailto:abhijit.airosys@gmail.com)  
+---
