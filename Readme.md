@@ -115,3 +115,5 @@ And no, I don’t do magic. I do engineering.
 **Abhijit Rai**  
 Email: [abhijit.airosys@gmail.com](mailto:abhijit.airosys@gmail.com)  
 ---
+> **Note:** This repository was originally developed under my other GitHub account, [abhijitrai1619](https://github.com/abhijitrai1619/Smart-Glasses-for-Visually-Impaired).  
+> It has been forked and maintained here under [aerostorm19](https://github.com/aerostorm19), also my account, purely for organizational and safety purposes.
